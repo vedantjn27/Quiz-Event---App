@@ -1,0 +1,51 @@
+{% extends 'quiz_app/base.html' %}
+
+{% block title %}All Quizzes - Quiz & Events App{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-800 mb-2">All Quizzes</h1>
+    <p class="text-gray-600">Choose a quiz and test your knowledge</p>
+</div>
+
+{% if quizzes %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for quiz in quizzes %}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden">
+        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6">
+            <h2 class="text-2xl font-bold text-white mb-2">{{ quiz.title }}</h2>
+            <div class="flex items-center text-white text-sm">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>{{ quiz.get_questions_count }} Questions</span>
+            </div>
+        </div>
+        
+        <div class="p-6">
+            <p class="text-gray-600 mb-4 line-clamp-3">{{ quiz.description }}</p>
+            
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-gray-500">Created: {{ quiz.created_at|date:"M d, Y" }}</span>
+            </div>
+            
+            <a href="{% url 'quiz_detail' quiz.id %}" class="block w-full bg-indigo-600 text-white text-center px-4 py-3 rounded-md hover:bg-indigo-700 transition font-semibold">
+                Start Quiz
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-8 text-center">
+    <svg class="w-16 h-16 mx-auto mb-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <h3 class="text-xl font-semibold mb-2">No Quizzes Available</h3>
+    <p class="text-lg mb-4">There are no quizzes available at the moment.</p>
+    <a href="/admin/" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition">
+        Add Quiz in Admin
+    </a>
+</div>
+{% endif %}
+{% endblock %}

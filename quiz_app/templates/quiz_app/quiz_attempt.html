@@ -1,0 +1,98 @@
+{% extends 'quiz_app/base.html' %}
+
+{% block title %}Attempt - {{ quiz.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-xl p-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ quiz.title }}</h1>
+            <p class="text-gray-600">{{ quiz.description }}</p>
+        </div>
+        
+        <form method="post" id="quizForm">
+            {% csrf_token %}
+            
+            <!-- User Name Input -->
+            <div class="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <label for="user_name" class="block text-lg font-semibold text-gray-800 mb-2">
+                    Your Name <span class="text-red-500">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="user_name" 
+                    name="user_name" 
+                    required 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    placeholder="Enter your name"
+                >
+            </div>
+            
+            <!-- Questions -->
+            <div class="space-y-8">
+                {% for question in questions %}
+                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                    <div class="flex items-start mb-4">
+                        <span class="bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3 flex-shrink-0">
+                            {{ forloop.counter }}
+                        </span>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ question.text }}</h3>
+                            
+                            <div class="space-y-3">
+                                {% for answer in question.answers.all %}
+                                <label class="flex items-start p-4 border border-gray-300 rounded-md hover:bg-white hover:border-indigo-500 cursor-pointer transition">
+                                    {% if question.question_type == 'multiple' %}
+                                    <input 
+                                        type="checkbox" 
+                                        name="question_{{ question.id }}" 
+                                        value="{{ answer.id }}"
+                                        class="mt-1 mr-3 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                    >
+                                    {% else %}
+                                    <input 
+                                        type="radio" 
+                                        name="question_{{ question.id }}" 
+                                        value="{{ answer.id }}"
+                                        class="mt-1 mr-3 h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                                    >
+                                    {% endif %}
+                                    <span class="text-gray-700">{{ answer.text }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="mt-8 flex items-center justify-between">
+                <a href="{% url 'quiz_detail' quiz.id %}" class="text-gray-600 hover:text-gray-800 font-semibold">
+                    ← Cancel
+                </a>
+                <button 
+                    type="submit" 
+                    class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition font-semibold text-lg"
+                    onclick="return confirm('Are you sure you want to submit your answers?');"
+                >
+                    Submit Quiz
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Form validation
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+        const userName = document.getElementById('user_name').value.trim();
+        if (!userName) {
+            e.preventDefault();
+            alert('Please enter your name before submitting.');
+            return false;
+        }
+    });
+</script>
+{% endblock %}
