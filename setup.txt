@@ -1,0 +1,71 @@
+# 1. Navigate to project directory
+cd django_quiz_events
+
+# 2. Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate 
+
+# 3. Install dependencies
+pip install -r requirements.txt 
+
+# 4. Make migrations
+python manage.py makemigrations
+
+# 5. Apply migrations
+python manage.py migrate
+
+# 6. Create superuser
+python manage.py createsuperuser
+
+# 7. Load sample data (optional)
+python manage.py loaddata sample_data.json
+
+# 8. Run the server
+python manage.py runserver
+```
+
+## Step 15: Testing the Application
+
+1. **Home Page**: Visit `http://127.0.0.1:8000/`
+2. **Quiz List**: Click on "Quizzes" in navigation
+3. **Take a Quiz**: Click "Start Quiz" on any quiz
+4. **View Results**: Submit quiz and see your score
+5. **Events**: Click on "Events" in navigation
+6. **Admin Panel**: Go to `http://127.0.0.1:8000/admin/` to manage content
+
+## Project File Structure Summary
+```
+django_quiz_events/
+├── venv/                          # Virtual environment
+├── quiz_events_project/
+│   ├── __init__.py
+│   ├── settings.py                # Project settings
+│   ├── urls.py                    # Main URL configuration
+│   ├── asgi.py
+│   └── wsgi.py
+├── quiz_app/
+│   ├── migrations/                # Database migrations
+│   ├── templates/
+│   │   └── quiz_app/
+│   │       ├── base.html          # Base template
+│   │       ├── home.html          # Home page
+│   │       ├── quiz_list.html     # All quizzes
+│   │       ├── quiz_detail.html   # Quiz details
+│   │       ├── quiz_attempt.html  # Take quiz
+│   │       ├── quiz_result.html   # Results page
+│   │       └── event_list.html    # Events page
+│   ├── fixtures/
+│   │   └── sample_data.json       # Sample data
+│   ├── __init__.py
+│   ├── admin.py                   # Admin configuration
+│   ├── apps.py
+│   ├── models.py                  # Database models
+│   ├── tests.py
+│   ├── views.py                   # View functions
+│   └── urls.py                    # App URLs
+├── manage.py                      # Django management script
+├── requirements.txt               # Project dependencies
+├── README.md                      # Project documentation
+└── db.sqlite3                     # SQLite database (created after migrations)
